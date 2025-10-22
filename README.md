@@ -2,7 +2,7 @@
 
 *The code is working on progress, and I will release it as soon as possible*
 
-**Purpose**
+<!-- **Purpose**
 
 This repository provide a template to make your software project more compliant with the [FAIR principles.](https://fair-software.nl/)
 
@@ -93,4 +93,4 @@ This repository provide a template to make your software project more compliant 
 
 ## Acknowlegdements
 
-[Name anyone who deserves it.]
+[Name anyone who deserves it.] -->
