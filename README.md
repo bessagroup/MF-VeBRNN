@@ -1,6 +1,6 @@
-# [Repository Title]
+# MF-VeBRNN: Single-to-multi-fidelity history-dependent learning with uncertainty quantification and disentanglement
 
-*Delete this text belowed when using this template in your repository*
+*The code is working on progress, and I will release it as soon as possible*
 
 **Purpose**
 
