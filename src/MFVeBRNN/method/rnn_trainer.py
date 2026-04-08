@@ -16,7 +16,6 @@ from typing import List, Tuple
 import numpy as np
 import torch
 from torch import Tensor
-from torch.autograd import Variable
 from torch.utils.data import DataLoader
 
 #                                                          Authorship & Credits
@@ -136,7 +135,7 @@ class RNNTrainer:
             x_val = x_val.to(self.device)
             y_val = y_val.to(self.device)
         # record the minimum loss of the validation data
-        min_loss = np.Inf
+        min_loss = np.inf
         # loader for mini-batch
         if batch_size is None:
             self.batch_size = x_train.shape[0]

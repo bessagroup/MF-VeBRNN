@@ -17,8 +17,7 @@ from torch.utils.data import DataLoader
 import numpy as np
 import copy
 from MFVeBRNN.method.rnn_trainer import RNNTrainer
-from BayesMFM.method.sf_cuq_rnn_trainer import CUQRNNBayesTrainer as LFRNNBayes
-
+from MFVeBRNN.method.vebnn_trainer import VeBRNNTrainer
 #                                                          Authorship & Credits
 # =============================================================================
 __author__ = 'J.Yi@tudelft.nl'
@@ -33,7 +32,7 @@ class MFResidualRNNTrainer:
     def __init__(
         self,
         net: torch.nn.Module,
-        pre_trained_lf_model: RNNTrainer | LFRNNBayes ,
+        pre_trained_lf_model: RNNTrainer | VeBRNNTrainer ,
         device: torch.device = torch.device("cpu"),
         seed: int = 0,
         nest_option: str = "hidden",
@@ -46,7 +45,7 @@ class MFResidualRNNTrainer:
             _description_
         dataset : MFDeterDataset
             _description_
-        pre_trained_lf_model : RNNTrainer | LFRNNBayes
+        pre_trained_lf_model : RNNTrainer | VeBRNNTrainer
             _description_
         device : torch.device, optional
             _description_, by default torch.device("cpu")
@@ -59,15 +58,17 @@ class MFResidualRNNTrainer:
         # load the net to the device
         self.net = net.to(self.device)
         # load the pre-trained low-fidelity model to the device
-        self.lf_model: RNNTrainer | LFRNNBayes  = pre_trained_lf_model
+        self.lf_model: RNNTrainer | VeBRNNTrainer  = pre_trained_lf_model
 
         # load to the device
         self.lf_model.device = self.device
         if isinstance(self.lf_model, RNNTrainer ):
             self.lf_model.best_net = self.lf_model.best_net.to(self.device)
-        elif isinstance(self.lf_model, LFRNNBayes):
+        elif isinstance(self.lf_model, VeBRNNTrainer):
             self.lf_model.mean_net = self.lf_model.mean_net.to(self.device)
             self.lf_model.var_net = self.lf_model.var_net.to(self.device)
+        else:
+            raise ValueError("Undefined low-fidelity model type")
 
         # set the seed and nest option
         self.seed = seed
@@ -133,7 +134,7 @@ class MFResidualRNNTrainer:
         hx_train = self._re_arrange_input(hx_train)
         if hx_val is not None:
             hx_val = self._re_arrange_input(hx_val)
-        min_loss = np.Inf
+        min_loss = np.inf
         # loader for mini-batch
         if batch_size is None:
             self.batch_size = hx_train.shape[0]
@@ -234,7 +235,7 @@ class MFResidualRNNTrainer:
         if isinstance(self.lf_model, RNNTrainer):
             y = self.lf_model.predict(x.to(self.device))
 
-        elif isinstance(self.lf_model, LFRNNBayes):
+        elif isinstance(self.lf_model, VeBRNNTrainer):
             y, var_epistemic = self.lf_model.bayes_predict(
                 x.to(self.device))
             var_aleatoric = self.lf_model.aleatoric_variance_predict(

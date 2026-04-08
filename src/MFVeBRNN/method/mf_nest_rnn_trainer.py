@@ -14,17 +14,24 @@ Class:
 
 import torch
 from torch import Tensor
-from BayesMFM.method.lf_rnn_trainer import LFStandardRNNTrainer
+from MFVeBRNN.method.rnn_trainer import RNNTrainer
+from MFVeBRNN.method.vebnn_trainer import VeBRNNTrainer
 from torch.utils.data import DataLoader
 import numpy as np
 import copy
+#                                                          Authorship & Credits
+# =============================================================================
+__author__ = 'J.Yi@tudelft.nl'
+__credits__ = ['Jiaxiang Yi']
+__status__ = 'Stable'
+# =============================================================================
 
 
 class MFNestRNNTrainer:
 
     def __init__(self,
                  net: torch.nn.Module,
-                 pre_trained_lf_model: LFStandardRNNTrainer,
+                 pre_trained_lf_model: RNNTrainer|VeBRNNTrainer,
                  device: torch.device = torch.device("cpu"),
                  seed: int = 0,
                  nest_option: str = "hidden",
@@ -37,7 +44,7 @@ class MFNestRNNTrainer:
             The high-fidelity neural network
         dataset : MFDeterDataset
             The multi-fidelity dataset
-        pre_trained_lf_model : LFStandardRNNTrainer
+        pre_trained_lf_model : RNNTrainer|VeBRNNTrainer
             The pre-trained low-fidelity model
         device : torch.device, optional
             _description_, by default torch.device("cpu")
@@ -47,11 +54,19 @@ class MFNestRNNTrainer:
             nested option, by default "hidden" or "output"
         """
         self.device = device
-        self.lf_model: LFStandardRNNTrainer = pre_trained_lf_model
         self.net = net.to(self.device)
+        # load the pre-trained low-fidelity model
+        self.lf_model: RNNTrainer|VeBRNNTrainer = pre_trained_lf_model
         # move the self.lf_model to the device
         self.lf_model.device = self.device
-        self.lf_model.net = self.lf_model.best_net.to(self.device)
+        if isinstance(self.lf_model, RNNTrainer):
+            self.lf_model.best_net = self.lf_model.best_net.to(self.device)
+        elif isinstance(self.lf_model, VeBRNNTrainer):
+            self.lf_model.mean_net = self.lf_model.mean_net.to(self.device)
+            self.lf_model.var_net = self.lf_model.var_net.to(self.device)
+        else:
+            raise ValueError("Undefined low-fidelity model type")
+        # set the seed and nest option
         self.seed = seed
         self.nest_option = nest_option
 
@@ -111,7 +126,7 @@ class MFNestRNNTrainer:
             hx_val = self._re_arrange_input(hx_val)
 
         # record the minimum loss of the validation data
-        min_loss = np.Inf
+        min_loss = np.inf
         # loader for mini-batch
         if batch_size is None:
             self.batch_size = hx_train.shape[0]
@@ -190,7 +205,7 @@ class MFNestRNNTrainer:
 
         return y.detach()
 
-    def lf_predict(self, x: Tensor) -> Tensor:
+    def lf_predict(self, x: Tensor, return_var: bool = False) -> Tensor:
         """predict the output of the network
 
         Parameters
@@ -204,9 +219,21 @@ class MFNestRNNTrainer:
             predicted output data
         """
 
-        y = self.lf_model.predict(x.to(self.device))
+        if isinstance(self.lf_model, RNNTrainer):
+            y = self.lf_model.predict(x.to(self.device))
+
+        elif isinstance(self.lf_model, VeBRNNTrainer):
+            y, var_epistemic = self.lf_model.bayes_predict(
+                x.to(self.device))
+            var_aleatoric = self.lf_model.aleatoric_variance_predict(
+                x.to(self.device))
+            if return_var:
+                return y, var_aleatoric, var_epistemic
+        else:
+            raise ValueError("Undefined low-fidelity model")
 
         return y
+
 
     def _re_arrange_input(self,
                           x: Tensor) -> Tensor:
@@ -241,7 +268,6 @@ class MFNestRNNTrainer:
 
             # predict the output of the low-fidelity model
             re_hx_input = self.lf_model.recurrent_forward(x)
-            # re_hx_input = torch.stack(re_hx_input, dim=1)
             re_hx_input = re_hx_input.detach()
             # concatenate the data
             x = torch.cat((x, re_hx_input), dim=-1)
