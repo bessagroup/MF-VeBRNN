@@ -25,3 +25,4 @@ __status__ = 'Stable'
 # =============================================================================
 
 from .dataset.load_dataset import SingleFidelityDataset, MultiFidelityDataset
+from .method.rnn_trainer import RNNTrainer

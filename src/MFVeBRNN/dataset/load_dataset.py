@@ -1062,7 +1062,7 @@ class MultiFidelityDataset:
             "Ground Truth (RVE)",
             "Ground Truth Mean (SVE)",
             "Ground Truth 95% CI"
-        ], loc="best", fontsize=10, edgecolor="none", frameon=False)
+        ], loc="lower right", fontsize=10, edgecolor="k", frameon=True)
 
         # set the fontsize of the axes
         for i in range(2):
