@@ -32,7 +32,7 @@ class MFResidualRNNTrainer:
     def __init__(
         self,
         net: torch.nn.Module,
-        pre_trained_lf_model: RNNTrainer | VeBRNNTrainer ,
+        pre_trained_lf_model: RNNTrainer | VeBRNNTrainer,
         device: torch.device = torch.device("cpu"),
         seed: int = 0,
         nest_option: str = "hidden",
@@ -58,11 +58,11 @@ class MFResidualRNNTrainer:
         # load the net to the device
         self.net = net.to(self.device)
         # load the pre-trained low-fidelity model to the device
-        self.lf_model: RNNTrainer | VeBRNNTrainer  = pre_trained_lf_model
+        self.lf_model: RNNTrainer | VeBRNNTrainer = pre_trained_lf_model
 
         # load to the device
         self.lf_model.device = self.device
-        if isinstance(self.lf_model, RNNTrainer ):
+        if isinstance(self.lf_model, RNNTrainer):
             self.lf_model.best_net = self.lf_model.best_net.to(self.device)
         elif isinstance(self.lf_model, VeBRNNTrainer):
             self.lf_model.mean_net = self.lf_model.mean_net.to(self.device)

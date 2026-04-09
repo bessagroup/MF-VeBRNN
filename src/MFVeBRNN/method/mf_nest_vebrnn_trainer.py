@@ -33,7 +33,7 @@ class MFNestVeBRNNTrainer:
     def __init__(self,
                  mean_net: MeanNet,
                  var_net: GammaVarNet,
-                 pre_trained_lf_model: RNNTrainer|VeBRNNTrainer,
+                 pre_trained_lf_model: RNNTrainer | VeBRNNTrainer,
                  device: torch.device = torch.device("cpu"),
                  job_id: int = 0,
                  nest_option: str = "hidden",
@@ -43,7 +43,7 @@ class MFNestVeBRNNTrainer:
         # define the device
         self.device = device
         # load the pre-trained low-fidelity model
-        self.lf_model: RNNTrainer | VeBRNNTrainer  = pre_trained_lf_model
+        self.lf_model: RNNTrainer | VeBRNNTrainer = pre_trained_lf_model
         # load the pre-trained low-fidelity model to the device
         self.lf_model.device = self.device
         if isinstance(self.lf_model, RNNTrainer):
@@ -68,57 +68,57 @@ class MFNestVeBRNNTrainer:
                           x_train: Tensor,
                           y_train: Tensor,
                           iteration: int,
-                          init_config = {
-                                    "loss_name": "MSE",
-                                    "optimizer_name": "Adam",
-                                    "lr": 1e-3,
-                                    "weight_decay": 1e-6,
-                                    "num_epochs": 1000,
-                                    "batch_size": 200,
-                                    "verbose": False,
-                                    "print_iter": 50,
-                                    "split_ratio": 0.8,
-                                },
-                        var_config = {
-                            "optimizer_name": "Adam",
-                            "lr": 1e-3,
-                            "num_epochs": 1000,
-                            "batch_size": 200,
-                            "verbose": True,
-                            "print_iter": 50,
-                            "early_stopping": False,
-                            "early_stopping_iter": 100,
-                            "early_stopping_tol": 1e-4,
-                        },
-                        sampler_config = {
-                            "sampler": "pSGLD",
-                            "lr": 1e-3,
-                            "gamma": 0.9999,
-                            "num_epochs": 2000,    # SGMCMC epochs
-                            "mix_epochs": 10,     # thinning interval
-                            "burn_in_epochs": 500,
-                            "batch_size": 200,
-                            "verbose": False,
-                            "print_iter": 100,
-                        },
-                        delete_model_raw_data=True,
+                          init_config={
+                              "loss_name": "MSE",
+                              "optimizer_name": "Adam",
+                              "lr": 1e-3,
+                              "weight_decay": 1e-6,
+                              "num_epochs": 1000,
+                              "batch_size": 200,
+                              "verbose": False,
+                              "print_iter": 50,
+                              "split_ratio": 0.8,
+                          },
+                          var_config={
+                              "optimizer_name": "Adam",
+                              "lr": 1e-3,
+                              "num_epochs": 1000,
+                              "batch_size": 200,
+                              "verbose": True,
+                              "print_iter": 50,
+                              "early_stopping": False,
+                              "early_stopping_iter": 100,
+                              "early_stopping_tol": 1e-4,
+                          },
+                          sampler_config={
+                              "sampler": "pSGLD",
+                              "lr": 1e-3,
+                              "gamma": 0.9999,
+                              "num_epochs": 2000,
+                              "mix_epochs": 10,
+                              "burn_in_epochs": 500,
+                              "batch_size": 200,
+                              "verbose": False,
+                              "print_iter": 100,
+                          },
+                          delete_model_raw_data=True,
                           ) -> None:
-            x_train = x_train.to(self.device)
-            y_train = y_train.to(self.device)
+        x_train = x_train.to(self.device)
+        y_train = y_train.to(self.device)
 
-            # re-arrange the input data
-            x_train = self._re_arrange_input(x_train)
+        # re-arrange the input data
+        x_train = self._re_arrange_input(x_train)
 
-            # train the residual model with the VeBNN trainer
-            self.hf_vebrnn_trainer.cooperative_train(
-                x_train=x_train,
-                y_train=y_train,
-                iteration=iteration,
-                init_config=init_config,
-                var_config=var_config,
-                sampler_config=sampler_config,
-                delete_model_raw_data=delete_model_raw_data,
-            )
+        # train the residual model with the VeBNN trainer
+        self.hf_vebrnn_trainer.cooperative_train(
+            x_train=x_train,
+            y_train=y_train,
+            iteration=iteration,
+            init_config=init_config,
+            var_config=var_config,
+            sampler_config=sampler_config,
+            delete_model_raw_data=delete_model_raw_data,
+        )
 
     def hf_bayes_predict(
         self,
@@ -144,7 +144,9 @@ class MFNestVeBRNNTrainer:
         x = self._re_arrange_input(x)
 
         # get the prediction from the residual model
-        y_pred_mean, y_pred_var = self.hf_vebrnn_trainer.bayes_predict(x,save_ppd=save_ppd)
+        y_pred_mean, y_pred_var = (
+            self.hf_vebrnn_trainer.bayes_predict(x, save_ppd=save_ppd)
+        )
 
         if save_ppd:
             self.responses = self.hf_vebrnn_trainer.responses

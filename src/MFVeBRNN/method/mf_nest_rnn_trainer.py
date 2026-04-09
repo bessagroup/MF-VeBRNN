@@ -31,7 +31,7 @@ class MFNestRNNTrainer:
 
     def __init__(self,
                  net: torch.nn.Module,
-                 pre_trained_lf_model: RNNTrainer|VeBRNNTrainer,
+                 pre_trained_lf_model: RNNTrainer | VeBRNNTrainer,
                  device: torch.device = torch.device("cpu"),
                  seed: int = 0,
                  nest_option: str = "hidden",
@@ -44,7 +44,7 @@ class MFNestRNNTrainer:
             The high-fidelity neural network
         dataset : MFDeterDataset
             The multi-fidelity dataset
-        pre_trained_lf_model : RNNTrainer|VeBRNNTrainer
+        pre_trained_lf_model : RNNTrainer | VeBRNNTrainer
             The pre-trained low-fidelity model
         device : torch.device, optional
             _description_, by default torch.device("cpu")
@@ -56,7 +56,7 @@ class MFNestRNNTrainer:
         self.device = device
         self.net = net.to(self.device)
         # load the pre-trained low-fidelity model
-        self.lf_model: RNNTrainer|VeBRNNTrainer = pre_trained_lf_model
+        self.lf_model: RNNTrainer | VeBRNNTrainer = pre_trained_lf_model
         # move the self.lf_model to the device
         self.lf_model.device = self.device
         if isinstance(self.lf_model, RNNTrainer):
