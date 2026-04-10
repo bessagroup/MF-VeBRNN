@@ -418,7 +418,7 @@
   <span class="md-ellipsis">
     
   
-    Single-fidelity RNN training
+    Single-fidelity RNN
   
 
     
@@ -445,7 +445,7 @@
   <span class="md-ellipsis">
     
   
-    Single-fidelity VeBRNN training
+    Single-fidelity VeBRNN
   
 
     
@@ -472,7 +472,7 @@
   <span class="md-ellipsis">
     
   
-    Multi-fidelity Nested RNN training
+    Multi-fidelity Nested RNN
   
 
     
@@ -553,7 +553,34 @@
   <span class="md-ellipsis">
     
   
-    Multi-fidelity Residual VeBRNN training
+    Multi-fidelity Residual VeBRNN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="load_dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Load Dataset
   
 
     
@@ -651,33 +678,19 @@
 <h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">¤</a></h2>
 <p><code>MF-VeBRNN</code> provides the implementation for the paper <a href="https://www.sciencedirect.com/science/article/pii/S0045782525007510">Single-to-multi-fidelity history-dependent learning with uncertainty quantification and disentanglement: Application to data-driven constitutive modeling</a>.</p>
 <h2 id="statement-of-need">Statement of need<a class="headerlink" href="#statement-of-need" title="Permanent link">¤</a></h2>
-<p>Data-driven learning is generalized to consider history-dependent multi-fidelity data, while quantifying epistemic uncertainty and disentangling it from data noise (aleatoric uncertainty). This generalization is hierarchical and adapts to different learning scenarios: from training the simplest single-fidelity deterministic neural networks up to the proposed multi-fidelity variance estimation Bayesian recurrent neural networks. The proposed methodology is demonstrated by applying it to different data-driven constitutive modeling scenarios for history-dependent plasticity of elastoplastic biphasic materials that include multiple fidelities with and without aleatoric uncertainty (noise). The method accurately predicts the response and quantifies model error while also discovering the noise distribution (when present). The versatility and generality of the proposed method open opportunities for future real-world applications in diverse scientific and engineering domains; especially, the most challenging cases involving design and analysis under uncertainty.</p>
-<ul>
-<li>a <strong>Variance estimation network</strong> (aleatoric uncertainty)</li>
-<li>a <strong>Bayesian neural network</strong> (epistemic uncertainty)</li>
-</ul>
-<p>They iteratively refine each other, resulting in:</p>
-<ul>
-<li>disentangled <strong>aleatoric &amp; epistemic</strong> uncertainty</li>
-<li>improved predictive accuracy</li>
-<li>stable training without ad-hoc tricks</li>
-</ul>
-<blockquote>
-<p>A visualization of the VeBNN training procedure is given as follows:</p>
-</blockquote>
+<p>In the domain of data-driven modeling, there are different fidelities of data with different cost, accuracy, and noise. Data-driven learning is generalized to consider history-dependent multi-fidelity data, while quantifying epistemic uncertainty and disentangling it from data noise (aleatoric uncertainty). This generalization is hierarchical and adapts to different learning scenarios: from training the simplest single-fidelity deterministic neural networks up to the proposed multi-fidelity variance estimation Bayesian recurrent neural networks.</p>
 <div align="center">
     <img src="logo/illustration.png" alt="VeBNN" width="800"/>
 </div>
 
-<hr />
 <p><strong>Authorship</strong>:
-- This repo is developed <a href="https://scholar.google.com/citations?user=LM6O83QAAAAJ&amp;hl=en">Jiaxiang Yi</a>, a PhD candidate of Delft University of Technology, based on his research context.</p>
+- This repo is developed <a href="https://scholar.google.com/citations?user=LM6O83QAAAAJ&amp;hl=en">Jiaxiang Yi</a>, a PhD researcher of Delft University of Technology, based on his research context.</p>
 <h2 id="community-support">Community Support<a class="headerlink" href="#community-support" title="Permanent link">¤</a></h2>
-<p>If you find any <strong>issues, bugs or problems</strong> with this package, please use the <a href="https://github.com/bessagroup/VeBNN/issues">GitHub issue tracker</a> to report them.</p>
+<p>If you find any <strong>issues, bugs or problems</strong> with this package, please use the <a href="https://github.com/bessagroup/MF-VeBRNN/issues">GitHub issue tracker</a> to report them.</p>
 <h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">¤</a></h2>
 <p>Copyright (c) 2025, Jiaxiang Yi</p>
 <p>All rights reserved.</p>
-<p>This project is licensed under the BSD 3-Clause License. See <a href="https://github.com/bessagroup/VeBNN/blob/main/LICENSE">LICENSE</a> for the full license text.</p>
+<p>This project is licensed under the BSD 3-Clause License. See <a href="https://github.com/bessagroup/MF-VeBRNN/blob/main/LICENSE">LICENSE</a> for the full license text.</p>
 
 
 

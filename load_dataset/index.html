@@ -15,6 +15,10 @@
         <link rel="canonical" href="https://bessagroup.github.io/MF-VeBRNN/load_dataset/">
       
       
+        <link rel="prev" href="../mf_residual_vebrnn_training/">
+      
+      
+        <link rel="next" href="../api/">
       
       
         
@@ -325,7 +329,7 @@
   <span class="md-ellipsis">
     
   
-    Single-fidelity RNN training
+    Single-fidelity RNN
   
 
     
@@ -352,7 +356,7 @@
   <span class="md-ellipsis">
     
   
-    Single-fidelity VeBRNN training
+    Single-fidelity VeBRNN
   
 
     
@@ -379,7 +383,7 @@
   <span class="md-ellipsis">
     
   
-    Multi-fidelity Nested RNN training
+    Multi-fidelity Nested RNN
   
 
     
@@ -460,7 +464,7 @@
   <span class="md-ellipsis">
     
   
-    Multi-fidelity Residual VeBRNN training
+    Multi-fidelity Residual VeBRNN
   
 
     
@@ -469,6 +473,102 @@
   
 
       </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Load Dataset
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Load Dataset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#load-single-fidelity-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Load single fidelity dataset
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#load-multi-fidelity-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Load multi-fidelity dataset
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -546,9 +646,10 @@
 
 <h1 id="load-dataset">Load Dataset<a class="headerlink" href="#load-dataset" title="Permanent link">¤</a></h1>
 <p>This notebook guidance on how to use the load datasets of the <code>MF-VeBRNN</code> repo.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># import fnctions and classes from the dataset module</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">MFVeBRNN.dataset.load_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingleFidelityDataset</span><span class="p">,</span> <span class="n">MultiFidelityDataset</span>
 </code></pre></div>
+<h2 id="load-single-fidelity-dataset">Load single fidelity dataset<a class="headerlink" href="#load-single-fidelity-dataset" title="Permanent link">¤</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">SingleFidelityDataset</span><span class="p">(</span><span class="n">train_data_path</span> <span class="o">=</span> <span class="s2">&quot;lf_dns_sve_0d1.pickle&quot;</span><span class="p">,</span>
                          <span class="n">id_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                          <span class="n">id_test_data_path</span><span class="o">=</span><span class="s2">&quot;hf_dns_rve_0d1_gt.pickle&quot;</span><span class="p">,</span>
@@ -565,12 +666,15 @@ Number of out-of-distribution test samples: 99
 =============================================================
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="n">dataset</span><span class="o">.</span><span class="n">get_train_val_split</span><span class="p">(</span><span class="n">num_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">num_val</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="c1"># plot a training data</span>
 <span class="n">dataset</span><span class="o">.</span><span class="n">plot_training_data</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </code></pre></div>
-<p><img alt="img" src="../_data/d9038bd94c9c4ee28bcbfb84b343c561.png" /></p>
-<div class="highlight"><pre><span></span><code><span class="n">dataset</span><span class="o">.</span><span class="n">plot_testing_data</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">test_data</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+<p><img alt="img" src="../_data/3d773586a69d4481abc74cfc0976b389.png" /></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># plot a test data</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">plot_testing_data</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">test_data</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p><img alt="img" src="../_data/79f7d59626d34d09888576d629c97cae.png" /></p>
+<p><img alt="img" src="../_data/443cd8446c1f4c2f9f3713cb1a50fc2e.png" /></p>
+<h2 id="load-multi-fidelity-dataset">Load multi-fidelity dataset<a class="headerlink" href="#load-multi-fidelity-dataset" title="Permanent link">¤</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">MultiFidelityDataset</span><span class="p">(</span><span class="n">lf_train_data_path</span> <span class="o">=</span> <span class="s2">&quot;lf_sca_rve_0d125_2_1.pickle&quot;</span><span class="p">,</span>
                          <span class="n">hf_train_data_path</span><span class="o">=</span> <span class="s2">&quot;hf_dns_rve_0d1.pickle&quot;</span><span class="p">,</span>
                          <span class="n">id_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -590,14 +694,15 @@ Number of in-distribution test samples: 99
 Number of out-of-distribution test samples: 99
 =============================================================
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="c1"># plot</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># plot a training data</span>
 <span class="n">dataset</span><span class="o">.</span><span class="n">plot_training_data</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fidelity</span><span class="o">=</span><span class="s1">&#39;lf&#39;</span><span class="p">)</span>
 </code></pre></div>
-<p><img alt="img" src="../_data/1a586ca49e8440cd944768693b4a68da.png" /></p>
+<p><img alt="img" src="../_data/829d5fd69e4446d79994b084b3e98d94.png" /></p>
 <div class="highlight"><pre><span></span><code><span class="c1"># plot testing data</span>
 <span class="n">dataset</span><span class="o">.</span><span class="n">plot_testing_data</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">test_data</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p><img alt="img" src="../_data/467803d01696406e87a72b0034f859ea.png" /></p>
+<p><img alt="img" src="../_data/d3a53c226767403599b20a73f2266d63.png" /></p>
+<p><strong>Have fun!</strong></p>
 
 
 

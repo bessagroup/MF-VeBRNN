@@ -29,7 +29,7 @@
     
     
       
-        <title>Single-fidelity VeBRNN training - MF-VeBRNN</title>
+        <title>Single-fidelity VeBRNN - MF-VeBRNN</title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#single-fidelity-vebrnn-training" class="md-skip">
+        <a href="#single-fidelity-vebrnn" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Single-fidelity VeBRNN training
+              Single-fidelity VeBRNN
             
           </span>
         </div>
@@ -329,7 +329,7 @@
   <span class="md-ellipsis">
     
   
-    Single-fidelity RNN training
+    Single-fidelity RNN
   
 
     
@@ -365,7 +365,7 @@
   <span class="md-ellipsis">
     
   
-    Single-fidelity VeBRNN training
+    Single-fidelity VeBRNN
   
 
     
@@ -383,7 +383,7 @@
   <span class="md-ellipsis">
     
   
-    Single-fidelity VeBRNN training
+    Single-fidelity VeBRNN
   
 
     
@@ -420,10 +420,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#define-a-gru-model-from-using-default-torch-implementation" class="md-nav__link">
+  <a href="#define-a-gru-network" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Define a GRU model from using default torch implementation
+        Define a GRU network
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#training-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Training setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-vernns-prediction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Get VeRNN's prediction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#have-fun" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Have fun!
       
     </span>
   </a>
@@ -452,7 +485,7 @@
   <span class="md-ellipsis">
     
   
-    Multi-fidelity Nested RNN training
+    Multi-fidelity Nested RNN
   
 
     
@@ -533,7 +566,34 @@
   <span class="md-ellipsis">
     
   
-    Multi-fidelity Residual VeBRNN training
+    Multi-fidelity Residual VeBRNN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../load_dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Load Dataset
   
 
     
@@ -617,7 +677,7 @@
 
 
 
-<h1 id="single-fidelity-vebrnn-training">Single-fidelity VeBRNN training<a class="headerlink" href="#single-fidelity-vebrnn-training" title="Permanent link">¤</a></h1>
+<h1 id="single-fidelity-vebrnn">Single-fidelity VeBRNN<a class="headerlink" href="#single-fidelity-vebrnn" title="Permanent link">¤</a></h1>
 <p>This notebook guidance on how to train <code>VeBRNN</code> of the <code>MF-VeBRNN</code> repo.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># import packages</span>
 
@@ -634,7 +694,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 </code></pre></div>
 <h2 id="load-the-plasticity-law-discovery-datset">Load the  plasticity law discovery datset<a class="headerlink" href="#load-the-plasticity-law-discovery-datset" title="Permanent link">¤</a></h2>
-<p>The plasticity law discovery datset can be loaded by the class <code>PlasticityLaw</code>.</p>
+<p>The plasticity law discovery dataset can be loaded by the class <code>SingleFidelityDataset</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">SingleFidelityDataset</span><span class="p">(</span><span class="n">train_data_path</span> <span class="o">=</span> <span class="s2">&quot;lf_dns_sve_0d1.pickle&quot;</span><span class="p">,</span>
                             <span class="n">id_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">id_test_data_path</span><span class="o">=</span><span class="s2">&quot;hf_dns_rve_0d1_gt.pickle&quot;</span><span class="p">,</span>
@@ -651,7 +711,8 @@ Number of in-distribution test samples: 99
 Number of out-of-distribution test samples: 99
 =============================================================
 </code></pre></div>
-<h2 id="define-a-gru-model-from-using-default-torch-implementation">Define a GRU model from using default torch implementation<a class="headerlink" href="#define-a-gru-model-from-using-default-torch-implementation" title="Permanent link">¤</a></h2>
+<h2 id="define-a-gru-network">Define a GRU network<a class="headerlink" href="#define-a-gru-network" title="Permanent link">¤</a></h2>
+<p>Since the history dependent constitutive law is has recurrent data structure, we need a recurrent neural network for this task. </p>
 <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SimpleGRU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -673,6 +734,7 @@ Number of out-of-distribution test samples: 99
         <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h2y</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>             <span class="c1"># (B, T, output_size)</span>
         <span class="k">return</span> <span class="n">y</span>
 </code></pre></div>
+<h2 id="training-setup">Training setup<a class="headerlink" href="#training-setup" title="Permanent link">¤</a></h2>
 <div class="highlight"><pre><span></span><code><span class="c1"># define the mean and variance networks</span>
 <span class="n">mean_network_</span> <span class="o">=</span> <span class="n">SimpleGRU</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                          <span class="n">hidden_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
@@ -744,6 +806,39 @@ Number of out-of-distribution test samples: 99
     <span class="n">delete_model_raw_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># delete temporary folder after training</span>
 <span class="p">)</span>
 </code></pre></div>
+<div class="highlight"><pre><span></span><code>=========================================================
+Step 2: Train for the variance network, iteration 1
+Epoch/Total: 0/1000, Gamma NLL: -3.280e+04, neg log prior: 1.323e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 50/1000, Gamma NLL: -5.184e+04, neg log prior: 1.324e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 100/1000, Gamma NLL: -7.267e+04, neg log prior: 1.328e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 150/1000, Gamma NLL: -9.174e+04, neg log prior: 1.335e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 200/1000, Gamma NLL: -1.041e+05, neg log prior: 1.343e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 250/1000, Gamma NLL: -1.114e+05, neg log prior: 1.351e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 300/1000, Gamma NLL: -1.159e+05, neg log prior: 1.357e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 350/1000, Gamma NLL: -1.189e+05, neg log prior: 1.363e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 400/1000, Gamma NLL: -1.209e+05, neg log prior: 1.368e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 450/1000, Gamma NLL: -1.223e+05, neg log prior: 1.373e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 500/1000, Gamma NLL: -1.233e+05, neg log prior: 1.377e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 550/1000, Gamma NLL: -1.241e+05, neg log prior: 1.381e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 600/1000, Gamma NLL: -1.247e+05, neg log prior: 1.385e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 650/1000, Gamma NLL: -1.251e+05, neg log prior: 1.389e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 700/1000, Gamma NLL: -1.255e+05, neg log prior: 1.392e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 750/1000, Gamma NLL: -1.258e+05, neg log prior: 1.395e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 800/1000, Gamma NLL: -1.261e+05, neg log prior: 1.399e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 850/1000, Gamma NLL: -1.263e+05, neg log prior: 1.402e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 900/1000, Gamma NLL: -1.265e+05, neg log prior: 1.405e+02, log marginal likelihood: 0.000e+00
+Epoch/Total: 950/1000, Gamma NLL: -1.268e+05, neg log prior: 1.409e+02, log marginal likelihood: 0.000e+00
+Finished training the variance network
+===========================================
+Step 3: Train for the mean network with SGMCMC
+Finished training the Bayesian mean network
+============================================
+Create model data folder to save the temporary models
+=========================================================
+Finished training the model
+Delete the model data folder to free space
+</code></pre></div>
+<h2 id="get-vernns-prediction">Get VeRNN's prediction<a class="headerlink" href="#get-vernns-prediction" title="Permanent link">¤</a></h2>
 <div class="highlight"><pre><span></span><code><span class="c1"># get the prediction from the bnn</span>
 <span class="n">pred</span><span class="p">,</span> <span class="n">var_epistemic</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">bayes_predict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">x_id_gt_scaled</span><span class="p">)</span>
 <span class="c1"># for aleatoric uncertainty</span>
@@ -961,6 +1056,8 @@ Number of out-of-distribution test samples: 99
         <span class="n">y_test_var</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">y_id_gt_var</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre></div>
+<p><img alt="img" src="../_data/d653f4e765074b95b273132f51df636c.png" /></p>
+<h2 id="have-fun">Have fun!<a class="headerlink" href="#have-fun" title="Permanent link">¤</a></h2>
 
 
 

@@ -29,7 +29,7 @@
     
     
       
-        <title>Single-fidelity RNN training - MF-VeBRNN</title>
+        <title>Single-fidelity RNN - MF-VeBRNN</title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#single-fidelity-rnn-training" class="md-skip">
+        <a href="#single-fidelity-rnn" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Single-fidelity RNN training
+              Single-fidelity RNN
             
           </span>
         </div>
@@ -331,6 +331,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Single-fidelity RNN
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -338,7 +356,7 @@
   <span class="md-ellipsis">
     
   
-    Single-fidelity RNN training
+    Single-fidelity RNN
   
 
     
@@ -347,6 +365,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#load-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Load dataset
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#define-a-simple-gru-network" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Define a simple GRU network
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#training-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Training setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-rnns-prediction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Get RNN's prediction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#have-fun" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Have fun!
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -366,7 +458,7 @@
   <span class="md-ellipsis">
     
   
-    Single-fidelity VeBRNN training
+    Single-fidelity VeBRNN
   
 
     
@@ -393,7 +485,7 @@
   <span class="md-ellipsis">
     
   
-    Multi-fidelity Nested RNN training
+    Multi-fidelity Nested RNN
   
 
     
@@ -474,7 +566,34 @@
   <span class="md-ellipsis">
     
   
-    Multi-fidelity Residual VeBRNN training
+    Multi-fidelity Residual VeBRNN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../load_dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Load Dataset
   
 
     
@@ -558,7 +677,7 @@
 
 
 
-<h1 id="single-fidelity-rnn-training">Single-fidelity RNN training<a class="headerlink" href="#single-fidelity-rnn-training" title="Permanent link">¤</a></h1>
+<h1 id="single-fidelity-rnn">Single-fidelity RNN<a class="headerlink" href="#single-fidelity-rnn" title="Permanent link">¤</a></h1>
 <p>This notebook guidance on how to train <code>RNN</code> of the <code>MF-VeBRNN</code> repo.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># import packages</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">MFVeBRNN.dataset.load_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingleFidelityDataset</span>
@@ -569,6 +688,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 </code></pre></div>
+<h2 id="load-dataset">Load dataset<a class="headerlink" href="#load-dataset" title="Permanent link">¤</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">SingleFidelityDataset</span><span class="p">(</span><span class="n">train_data_path</span> <span class="o">=</span> <span class="s2">&quot;lf_dns_sve_0d1.pickle&quot;</span><span class="p">,</span>
                             <span class="n">id_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">id_test_data_path</span><span class="o">=</span><span class="s2">&quot;hf_dns_rve_0d1_gt.pickle&quot;</span><span class="p">,</span>
@@ -585,6 +705,8 @@ Number of in-distribution test samples: 99
 Number of out-of-distribution test samples: 99
 =============================================================
 </code></pre></div>
+<h2 id="define-a-simple-gru-network">Define a simple GRU network<a class="headerlink" href="#define-a-simple-gru-network" title="Permanent link">¤</a></h2>
+<p>Since the history dependent constitutive law is has recurrent data structure, we need a recurrent neural network for this task. </p>
 <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SimpleGRU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -606,6 +728,7 @@ Number of out-of-distribution test samples: 99
         <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h2y</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>             <span class="c1"># (B, T, output_size)</span>
         <span class="k">return</span> <span class="n">y</span>
 </code></pre></div>
+<h2 id="training-setup">Training setup<a class="headerlink" href="#training-setup" title="Permanent link">¤</a></h2>
 <div class="highlight"><pre><span></span><code><span class="c1"># define the RNN model</span>
 <span class="n">rnn_network</span> <span class="o">=</span> <span class="n">SimpleGRU</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                       <span class="n">hidden_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
@@ -637,19 +760,20 @@ Number of out-of-distribution test samples: 99
 <span class="p">)</span>
 
 <span class="c1"># save the model</span>
-<span class="c1"># torch.save(DeepRNN, &quot;single_fidelity_rnn_model.pth&quot;)</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">DeepRNN</span><span class="p">,</span> <span class="s2">&quot;single_fidelity_rnn_model.pth&quot;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>Epoch/Total: 0/500, Train Loss: 9.183e-01, Val Loss: 9.715e-01
-Epoch/Total: 100/500, Train Loss: 2.264e-01, Val Loss: 2.307e-01
-Epoch/Total: 200/500, Train Loss: 3.628e-02, Val Loss: 4.075e-02
-Epoch/Total: 300/500, Train Loss: 2.566e-02, Val Loss: 3.057e-02
-Epoch/Total: 400/500, Train Loss: 1.943e-02, Val Loss: 2.490e-02
+<div class="highlight"><pre><span></span><code>Epoch/Total: 0/500, Train Loss: 9.229e-01, Val Loss: 9.716e-01
+Epoch/Total: 100/500, Train Loss: 2.096e-01, Val Loss: 2.165e-01
+Epoch/Total: 200/500, Train Loss: 3.355e-02, Val Loss: 3.849e-02
+Epoch/Total: 300/500, Train Loss: 2.459e-02, Val Loss: 2.920e-02
+Epoch/Total: 400/500, Train Loss: 1.948e-02, Val Loss: 2.424e-02
 </code></pre></div>
+<h2 id="get-rnns-prediction">Get RNN's prediction<a class="headerlink" href="#get-rnns-prediction" title="Permanent link">¤</a></h2>
 <div class="highlight"><pre><span></span><code><span class="c1"># get the prediction of the test data</span>
 <span class="n">y_pred</span> <span class="o">=</span> <span class="n">DeepRNN</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">x_id_gt_scaled</span><span class="p">)</span>
 <span class="c1"># scale back to the original space</span>
 <span class="n">y_pred</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">scale_back_outputs</span><span class="p">(</span><span class="n">y_pred</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">())</span>
-<span class="c1"># plot the dataset</span>
+<span class="c1"># plot a test data with the prediction and the ground truth</span>
 <span class="n">index</span> <span class="o">=</span><span class="mi">1</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
@@ -659,9 +783,21 @@ Epoch/Total: 400/500, Train Loss: 1.943e-02, Val Loss: 2.490e-02
     <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_pred</span><span class="o">.</span><span class="n">cpu</span><span class="p">()[</span><span class="n">index</span><span class="p">,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;y pred&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
+
+<span class="c1"># set the x and y labels</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time step&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;strain&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;stress&#39;</span><span class="p">)</span>
+<span class="c1"># set the title</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Component 11&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Component 12&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Component 22&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
-<p><img alt="img" src="../_data/2fe060cf8f82401aab8e600394cf77c9.png" /></p>
+<p><img alt="img" src="../_data/f84535c9eecf494fbbdbfd554e9868e8.png" /></p>
+<h2 id="have-fun">Have fun!<a class="headerlink" href="#have-fun" title="Permanent link">¤</a></h2>
 
 
 
