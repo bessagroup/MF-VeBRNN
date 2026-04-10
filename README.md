@@ -48,8 +48,20 @@ pip install --editable .
 ```
 pip install -r requirements.txt
 ```
+---
 
+If you use [MF-VeBRNN](https://github.com/bessagroup/MF-VeBRNN), please cite the following [paper](https://www.sciencedirect.com/science/article/pii/S0045782525007510):
 
+```
+@article{yi2026single_to_multi,
+title = {Single-to-multi-fidelity history-dependent learning with uncertainty quantification and disentanglement: Application to data-driven constitutive modeling},
+journal = {Computer Methods in Applied Mechanics and Engineering},
+volume = {448},
+pages = {118479},
+year = {2026},
+issn = {0045-7825},
+}
+```
 ## Community Support
 
 If you find any **issues, bugs or problems** with this package, please use the [GitHub issue tracker](https://github.com/bessagroup/MF-VeBRNN/issues) to report them.
