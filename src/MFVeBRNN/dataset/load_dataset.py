@@ -372,6 +372,8 @@ class SingleFidelityDataset:
         ----------
         index : int
             index of the data
+        test_data : str, optional
+            which test data to plot, "id" for in-distribution data and "ood"
         save_figure : bool, optional
             save the figure, by default False
 
@@ -558,8 +560,19 @@ class SingleFidelityDataset:
 
     def convert_data_to_torch(
         self,
-        dataset,
+        dataset: pd.DataFrame,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
+        """convert the data to torch tensors
+        Parameters
+        ----------
+        dataset : pd.DataFrame
+            dataset to be converted
+
+        Returns
+        -------
+        Tuple[torch.Tensor, torch.Tensor]
+            X and Y tensors
+        """
         # empty lists for data
         X, Y = [], []
         # gen number of samples
@@ -635,6 +648,32 @@ class MultiFidelityDataset:
                  ood_ground_truth: bool = False,
                  ood_lf_ground_truth_data_path: str = None,
                  ood_hf_test_data_path: str = None) -> None:
+        """Multi-fidelity dataset for plasticity law datasets
+
+        Parameters
+        ----------
+        lf_train_data_path : str, optional
+            path for low-fidelity training data, by default None
+        hf_train_data_path : str, optional
+            path for high-fidelity training data, by default None
+        id_ground_truth : bool, optional
+            whether to include in-distribution ground truth data,
+            by default True
+        id_lf_ground_truth_data_path : str, optional
+            path for in-distribution low-fidelity ground truth data,
+            by default None
+        id_hf_test_data_path : str, optional
+            path for in-distribution high-fidelity test data, by default None
+        ood_ground_truth : bool, optional
+            whether to include out-of-distribution ground truth data,
+            by default False
+        ood_lf_ground_truth_data_path : str, optional
+            path for out-of-distribution low-fidelity ground truth data,
+            by default None
+        ood_hf_test_data_path : str, optional
+            path for out-of-distribution high-fidelity test data,
+            by default None
+        """
 
 
         # get the path of the repository
@@ -779,6 +818,8 @@ class MultiFidelityDataset:
             Number of training data
         num_hf_val : int
             Number of validation data
+        seed: int
+            seed of selecting the training paths
         """
         total_hf_samples = len(self.hf_dataset)
         requested_total = num_hf_train + num_hf_val
@@ -901,6 +942,9 @@ class MultiFidelityDataset:
 
         index: int
             index of the path
+        fidelity: str
+            which fidelity to plot, "lf" for low-fidelity data and "hf" for
+            high-fidelity data
         save_figure: bool
             save the figure to disk or not
         """
@@ -983,9 +1027,10 @@ class MultiFidelityDataset:
         ----------
         index : int
             index of the data
+        test_data : str, optional
+            type of test data to plot, by default "id"
         save_figure : bool, optional
             save the figure, by default False
-
         """
 
         # get the data
@@ -1170,8 +1215,20 @@ class MultiFidelityDataset:
 
     def convert_data_to_torch(
         self,
-        dataset,
+        dataset: pd.DataFrame,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
+        """convert data to torch
+
+        Parameters
+        ----------
+        dataset : pd.DataFrame
+            dataset data frame
+
+        Returns
+        -------
+        Tuple[torch.Tensor, torch.Tensor]
+            A tuple of data
+        """
         # empty lists for data
         X, Y = [], []
         # gen number of samples
@@ -1212,18 +1269,18 @@ class MultiFidelityDataset:
         return output_data * self.LY_std**2
 
     @staticmethod
-    def _normalize_data(data) -> Tuple[Tensor, Tensor, Tensor]:
+    def _normalize_data(data: Tensor) -> Tuple[Tensor, Tensor, Tensor]:
         """normalize the dataset
 
         Parameters
         ----------
-        data : _type_
-            _description_
+        data : Tensor
+            data to be normalized
 
         Returns
         -------
         Tuple[Tensor, Tensor, Tensor]
-            _description_
+            normalized data, mean, and standard deviation
         """
         dim = (0, 1)
         data_mean = data.mean(dim=dim, keepdim=True)

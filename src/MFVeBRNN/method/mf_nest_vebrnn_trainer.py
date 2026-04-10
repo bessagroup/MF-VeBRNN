@@ -1,11 +1,12 @@
 # ------------------ Beginning of Reference Python Module ---------------------
-""" This module contains the class MFResidualRNNTrainer, which is a wrapper
+""" This module contains the class MFNestVeBRNNTrainer, which is a wrapper
 for multi-fidelity recurrent neural networks deterministically with a linear
-transfer learning and non-linear residual network.
+transfer learning and non-linear residual network and trained with
+Variance estimation Bayesian neural networks.
 Class:
-    MFResidualRNNTrainer: A wrapper class for multi-fidelity recurrent neural
+    MFNestVeBRNNTrainer: A wrapper class for multi-fidelity recurrent neural
     networks deterministically with a linear transfer learning and non-linear
-    residual network.
+    residual network based on VeBNN.
 
 """
 #
@@ -39,6 +40,20 @@ class MFNestVeBRNNTrainer:
                  nest_option: str = "hidden",
                  ) -> None:
         """initialize the trainer for the high-fidelity model
+
+        mean_net : MeanNet
+            mean neural network for the VeBNN
+        var_net : GammaVarNet
+            variance estimation neural network for VeBNN
+        pre_trained_lf_model : RNNTrainer | VeBRNNTrainer
+            the pre-trained low-fidelity model, which can be either RNNTrainer
+            or VeBRNNTrainer
+        device : torch.device, optional
+            device for training, by default torch.device("cpu")
+        job_id : int, optional
+            job ID for the training, by default 0
+        nest_option : str, optional
+            nested option, by default "hidden" or "output"
         """
         # define the device
         self.device = device
@@ -103,6 +118,62 @@ class MFNestVeBRNNTrainer:
                           },
                           delete_model_raw_data=True,
                           ) -> None:
+        """train the high-fidelity model with the cooperative training process
+        Parameters
+        ----------
+        x_train : Tensor
+            input training data
+        y_train : Tensor
+            output training data
+        iteration : int
+            the iteration of the cooperative training process
+        init_config : dict, optional
+            configuration for the initialization of the high-fidelity model, by
+            default is a dictionary with the following keys and values:
+            {
+                "loss_name": "MSE",
+                "optimizer_name": "Adam",
+                "lr": 1e-3,
+                "weight_decay": 1e-6,
+                "num_epochs": 1000,
+                "batch_size": 200,
+                "verbose": False,
+                "print_iter": 50,
+                "split_ratio": 0.8,
+            }
+        var_config : dict, optional
+            configuration for the variance estimation of the high-fidelity
+            model, by default is a dictionary with the following keys and
+            values:
+            {
+                "optimizer_name": "Adam",
+                "lr": 1e-3,
+                "num_epochs": 1000,
+                "batch_size": 200,
+                "verbose": True,
+                "print_iter": 50,
+                "early_stopping": False,
+                "early_stopping_iter": 100,
+                "early_stopping_tol": 1e-4,
+            }
+        sampler_config : dict, optional
+            configuration for the sampler of the high-fidelity model,
+            by default is a dictionary with the following keys and values:
+            {
+                "sampler": "pSGLD",
+                "lr": 1e-3,
+                "gamma": 0.9999,
+                "num_epochs": 2000,
+                "mix_epochs": 10,
+                "burn_in_epochs": 500,
+                "batch_size": 200,
+                "verbose": False,
+                "print_iter": 100,
+            }
+        delete_model_raw_data : bool, optional
+            whether to delete the raw data of the model after training,
+            by default True
+        """
         x_train = x_train.to(self.device)
         y_train = y_train.to(self.device)
 
@@ -223,6 +294,13 @@ class MFNestVeBRNNTrainer:
 
 
     def _init_hf_trainer(self) -> VeBRNNTrainer:
+        """init the high-fidelity trainer.
+
+        Returns
+        -------
+        VeBRNNTrainer
+            high fidelity trainer.
+        """
         vebrnn_trainer = VeBRNNTrainer(
             mean_net=self.un_trained_mean_net,
             var_net=self.un_trained_var_net,

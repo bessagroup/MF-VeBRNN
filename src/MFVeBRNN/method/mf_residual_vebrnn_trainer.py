@@ -1,11 +1,12 @@
 # ------------------ Beginning of Reference Python Module ---------------------
-""" This module contains the class MFResidualRNNTrainer, which is a wrapper
+""" This module contains the class MFResidualVeBRNNTrainer, which is a wrapper
 for multi-fidelity recurrent neural networks deterministically with a linear
-transfer learning and non-linear residual network.
+transfer learning and non-linear residual network, trained with VeBNN.
+
 Class:
-    MFResidualRNNTrainer: A wrapper class for multi-fidelity recurrent neural
-    networks deterministically with a linear transfer learning and non-linear
-    residual network.
+    MFResidualVeBRNNTrainer: A wrapper class for multi-fidelity recurrent neural
+    networks with a linear transfer learning and non-linear
+    residual network, trained with VeBNN.
 
 """
 #
@@ -39,6 +40,21 @@ class MFResidualVeBRNNTrainer:
                  nest_option: str = "hidden",
                  ) -> None:
         """initialize the trainer for the high-fidelity model
+
+        Parameters
+        ----------
+        mean_net : MeanNet
+            the mean network for the high-fidelity model
+        var_net : GammaVarNet
+            the variance network for the high-fidelity model
+        pre_trained_lf_model : RNNTrainer | VeBRNNTrainer
+            the pre-trained low-fidelity model
+        device : torch.device, optional
+            the device to train the model on, by default torch.device("cpu")
+        job_id : int, optional
+            the job ID for reproducibility, by default 0
+        nest_option : str, optional
+            the nested option, by default "hidden"
         """
         # define the device
         self.device = device
@@ -103,6 +119,25 @@ class MFResidualVeBRNNTrainer:
                           },
                           delete_model_raw_data=True,
                           ) -> None:
+        """Train the high-fidelity model cooperatively with low-fidelity model.
+
+        Parameters
+        ----------
+        x_train : Tensor
+            Training input data
+        y_train : Tensor
+            Training output data
+        iteration : int
+            Number of iterations
+        init_config : dict, optional
+            Initial training configuration
+        var_config : dict, optional
+            Variance network training configuration
+        sampler_config : dict, optional
+            Sampler configuration for SGMCMC
+        delete_model_raw_data : bool, optional
+            Whether to delete raw data after training
+        """
         x_train = x_train.to(self.device)
         y_train = y_train.to(self.device)
         print(x_train.shape, y_train.shape)
@@ -226,18 +261,18 @@ class MFResidualVeBRNNTrainer:
                             y: Tensor) -> Tensor:
         """calculate residual between the predicted output and the true output
 
-          Parameters
-          ----------
-          x : Tensor
-                input data
-          y : Tensor
-                true output data
+        Parameters
+        ----------
+        x : Tensor
+            input data
+        y : Tensor
+            true output data
 
-          Returns
-          -------
-          Tensor
-                residual between the predicted output and the true output
-          """
+        Returns
+        -------
+        Tensor
+            residual between the predicted output and the true output
+        """
 
         y_pred = self.lf_predict(x)
         residual = y - y_pred
@@ -246,6 +281,13 @@ class MFResidualVeBRNNTrainer:
 
 
     def _init_hf_trainer(self) -> VeBRNNTrainer:
+        """init the high-fidelity trainer.
+
+        Returns
+        -------
+        VeBRNNTrainer
+            high fidelity trainer.
+        """
         vebrnn_trainer = VeBRNNTrainer(
             mean_net=self.un_trained_mean_net,
             var_net=self.un_trained_var_net,

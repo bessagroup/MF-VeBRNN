@@ -37,6 +37,15 @@ class RNNTrainer:
     ) -> None:
         """initialize the RNN with linear transfer layer and BNN for residual
         learning
+
+        Parameters
+        ----------
+        net : torch.nn.Module
+            the RNN network to be trained
+        device : torch.device, optional
+            device for training, by default torch.device("cpu")
+        seed : int, optional
+            random seed for reproducibility, by default 0
         """
         # device
         self.device = device
@@ -51,7 +60,17 @@ class RNNTrainer:
         lr: float = 1e-3,
         weight_decay: float = 1e-6
     ) -> None:
-        """define optimizer of the low-fidelity deterministic RNN"""
+        """define optimizer of the low-fidelity deterministic RNN
+
+        Parameters
+        ----------
+        optimizer_name : str, optional
+            name of the optimizer, by default "Adam"
+        lr : float, optional
+            learning rate for the optimizer, by default 1e-3
+        weight_decay : float, optional
+            weight decay for the optimizer, by default 1e-6
+        """
         if optimizer_name == "Adam":
             self.optimizer = torch.optim.Adam(
                 self.net.parameters(),

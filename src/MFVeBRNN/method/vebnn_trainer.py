@@ -29,6 +29,20 @@ class VeBRNNTrainer(SGMCMCTrainer):
         device: torch.device = torch.device("cpu"),
         job_id: int = 1,
     ) -> None:
+        """Variance estimation Bayesian neural network training using
+        Stochastic
+
+        Parameters
+        ----------
+        mean_net : MeanNet
+            mean neural network for the VeBNN
+        var_net : GammaVarNet
+            variance estimation neural network for VeBNN
+        device : torch.device, optional
+            device for training, by default torch.device("cpu")
+        job_id : int, optional
+            job ID for the training, by default 1
+        """
         super().__init__(
             mean_net=mean_net,
             var_net=var_net,
@@ -39,7 +53,20 @@ class VeBRNNTrainer(SGMCMCTrainer):
     def recurrent_forward(self,
                           x: torch.Tensor,
                           return_var: bool = False) -> torch.Tensor:
-        """forward of low-fidelity RNN, such that hidden states are returned"""
+        """forward of low-fidelity RNN, such that hidden states are returned
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            input data for the forward pass
+        return_var : bool, optional
+            whether to return the variance estimation, by default False
+
+        Returns
+        -------
+        torch.Tensor
+            output data for the forward pass
+        """
 
         hidden_states = []
         for state_dict in self.mean_nets:

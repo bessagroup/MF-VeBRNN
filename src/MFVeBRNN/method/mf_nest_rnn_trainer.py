@@ -19,6 +19,7 @@ from MFVeBRNN.method.vebnn_trainer import VeBRNNTrainer
 from torch.utils.data import DataLoader
 import numpy as np
 import copy
+from typing import Tuple
 #                                                          Authorship & Credits
 # =============================================================================
 __author__ = 'J.Yi@tudelft.nl'
@@ -42,14 +43,12 @@ class MFNestRNNTrainer:
         ----------
         net : torch.nn.Module
             The high-fidelity neural network
-        dataset : MFDeterDataset
-            The multi-fidelity dataset
         pre_trained_lf_model : RNNTrainer | VeBRNNTrainer
             The pre-trained low-fidelity model
         device : torch.device, optional
-            _description_, by default torch.device("cpu")
+            device for training, by default torch.device("cpu")
         seed : int, optional
-            _description_, by default 0
+            random seed for reproducibility, by default 0
         nest_option : str, optional
             nested option, by default "hidden" or "output"
         """
@@ -74,6 +73,22 @@ class MFNestRNNTrainer:
                                  optimizer_name: str = "Adam",
                                  lr: float = 0.001,
                                  weight_decay: float = 0.0):
+        """configure optimizers
+
+        Parameters
+        ----------
+        optimizer_name : str, optional
+            name of the optimizer, by default "Adam"
+        lr : float, optional
+            learning rate for the optimizer, by default 0.001
+        weight_decay : float, optional
+            weight decay for the optimizer, by default 0.0
+
+        Raises
+        ------
+        ValueError
+            Undefined optimizer
+        """
 
         if optimizer_name == "Adam":
             self.optimizer = torch.optim.Adam(
@@ -112,7 +127,30 @@ class MFNestRNNTrainer:
               hx_val: Tensor = None,
               hy_val: Tensor = None,
               verbose: bool = True,
-              print_iter: int = 100) -> None:
+              print_iter: int = 100) -> Tuple[float]:
+        """train the multi-fidelity rnn model
+
+        Parameters
+        ----------
+        hx_train : Tensor
+            high-fidelity training input data
+        hy_train : Tensor
+            high-fidelity training output data
+        num_epochs : int
+            number of epochs to train
+        batch_size : int, optional
+            size of the mini-batch, by default None
+        hx_val : Tensor, optional
+            high-fidelity validation input data, by default None
+        hy_val : Tensor, optional
+            high-fidelity validation output data, by default None
+        verbose : bool, optional
+            whether to print training information, by default True
+        print_iter : int, optional
+            frequency of printing training information, by default 100
+
+
+        """
         # set the data to the device
         hx_train = hx_train.to(self.device)
         hy_train = hy_train.to(self.device)
@@ -286,17 +324,17 @@ class MFNestRNNTrainer:
     ) -> None:
         """print the loss values during training at certain epochs
 
-            Parameters
-            ----------
-            epoch : int
-                the current epoch
-            num_epoch : int
-                total number of epochs
-            loss_train : float
-                training loss value at the current epoch
-            loss_val : float
-                validation loss value at the current epoch
-            """
+        Parameters
+        ----------
+        epoch : int
+            the current epoch
+        num_epoch : int
+            total number of epochs
+        loss_train : float
+            training loss value at the current epoch
+        loss_val : float
+            validation loss value at the current epoch
+        """
 
         print(
             "Epoch/Total: %d/%d, Train Loss: %.3e, Val Loss: %.3e"

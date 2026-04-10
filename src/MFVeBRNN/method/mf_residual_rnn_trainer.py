@@ -11,6 +11,7 @@ Class:
 #
 #                                                                       Modules
 # =============================================================================
+from typing import Tuple
 import torch
 from torch import Tensor
 from torch.utils.data import DataLoader
@@ -28,6 +29,8 @@ __status__ = 'Stable'
 
 
 class MFResidualRNNTrainer:
+    """multi-fidelity residual rnn trainer.
+    """
 
     def __init__(
         self,
@@ -42,15 +45,13 @@ class MFResidualRNNTrainer:
         Parameters
         ----------
         net : torch.nn.Module
-            _description_
-        dataset : MFDeterDataset
-            _description_
+            the high-fidelity neural network
         pre_trained_lf_model : RNNTrainer | VeBRNNTrainer
-            _description_
+            the pre-trained low-fidelity model
         device : torch.device, optional
-            _description_, by default torch.device("cpu")
+            the device to train the model on, by default torch.device("cpu")
         seed : int, optional
-            _description_, by default 0
+            the random seed for reproducibility, by default 0
         nest_option : str, optional
             nested option, by default "hidden" or "output"
         """
@@ -78,6 +79,22 @@ class MFResidualRNNTrainer:
                                  optimizer_name: str = "Adam",
                                  lr: float = 0.001,
                                  weight_decay: float = 0.0):
+        """configure optimizer.
+
+        Parameters
+        ----------
+        optimizer_name : str, optional
+            optimizer name, by default "Adam"
+        lr : float, optional
+            learning rate, by default 0.001
+        weight_decay : float, optional
+            weight decay, by default 0.0
+
+        Raises
+        ------
+        ValueError
+            Undefined optimizer
+        """
 
         if optimizer_name == "Adam":
             self.optimizer = torch.optim.Adam(
@@ -116,7 +133,33 @@ class MFResidualRNNTrainer:
               hx_val: Tensor = None,
               hy_val: Tensor = None,
               verbose: bool = True,
-              print_iter: int = 100,) -> None:
+              print_iter: int = 100,) -> Tuple[float, int]:
+        """train the high-fidelity model
+
+        Parameters
+        ----------
+        hx_train : Tensor
+            high-fidelity train inputs
+        hy_train : Tensor
+            high-fidelity train outputs
+        num_epochs : int
+            num of epochs
+        batch_size : int, optional
+            batch size, by default None
+        hx_val : Tensor, optional
+            high-fidelity validation inputs, by default None
+        hy_val : Tensor, optional
+            high-fidelity validation inputs, by default None
+        verbose : bool, optional
+            verbose or not, by default True
+        print_iter : int, optional
+            print iteration, by default 100
+
+        Returns
+        -------
+        Tuple[float, int]
+            best validation loss and the corresponding epoch
+        """
 
         # set the data to the device
         hx_train = hx_train.to(self.device)
@@ -290,18 +333,18 @@ class MFResidualRNNTrainer:
                             y: Tensor) -> Tensor:
         """calculate residual between the predicted output and the true output
 
-          Parameters
-          ----------
-          x : Tensor
-                input data
-          y : Tensor
-                true output data
+        Parameters
+        ----------
+        x : Tensor
+            input data
+        y : Tensor
+            true output data
 
-          Returns
-          -------
-          Tensor
-                residual between the predicted output and the true output
-          """
+        Returns
+        -------
+        Tensor
+            residual between the predicted output and the true output
+        """
 
         y_pred = self.lf_predict(x)
         residual = y - y_pred
@@ -317,17 +360,17 @@ class MFResidualRNNTrainer:
     ) -> None:
         """print the loss values during training at certain epochs
 
-            Parameters
-            ----------
-            epoch : int
-                the current epoch
-            num_epoch : int
-                total number of epochs
-            loss_train : float
-                training loss value at the current epoch
-            loss_val : float
-                validation loss value at the current epoch
-            """
+        Parameters
+        ----------
+        epoch : int
+            the current epoch
+        num_epoch : int
+            total number of epochs
+        loss_train : float
+            training loss value at the current epoch
+        loss_val : float
+            validation loss value at the current epoch
+        """
 
         print(
             "Epoch/Total: %d/%d, Train Loss: %.3e, Val Loss: %.3e"
