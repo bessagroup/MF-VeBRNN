@@ -1,7 +1,0 @@
-torch
-numpy
-matplotlib
-ipykernel
-pandas
-
-git+https://github.com/bessagroup/VeBNN.git@main
