@@ -25,7 +25,7 @@
     
     
       
-        <title>Load dataset - MF-VeBRNN</title>
+        <title>Load Dataset - MF-VeBRNN</title>
       
     
     
@@ -79,6 +79,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#load-dataset" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -111,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Load dataset
+              Load Dataset
             
           </span>
         </div>
@@ -320,7 +325,7 @@
   <span class="md-ellipsis">
     
   
-    Sf rnn training
+    Single-fidelity RNN training
   
 
     
@@ -347,7 +352,7 @@
   <span class="md-ellipsis">
     
   
-    Sf vebrnn training
+    Single-fidelity VeBRNN training
   
 
     
@@ -374,7 +379,7 @@
   <span class="md-ellipsis">
     
   
-    Mf nest training
+    Multi-fidelity Nested RNN training
   
 
     
@@ -401,7 +406,7 @@
   <span class="md-ellipsis">
     
   
-    Mf residual training
+    Multi-fidelity Residual RNN training
   
 
     
@@ -428,7 +433,7 @@
   <span class="md-ellipsis">
     
   
-    Mf nest vebrnn training
+    Multi-fidelity Nested VeBRNN training
   
 
     
@@ -455,7 +460,7 @@
   <span class="md-ellipsis">
     
   
-    Mf residual vebrnn training
+    Multi-fidelity Residual VeBRNN training
   
 
     
@@ -539,8 +544,8 @@
 
 
 
-  <h1>Load dataset</h1>
-
+<h1 id="load-dataset">Load Dataset<a class="headerlink" href="#load-dataset" title="Permanent link">¤</a></h1>
+<p>This notebook guidance on how to use the load datasets of the <code>MF-VeBRNN</code> repo.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">MFVeBRNN.dataset.load_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingleFidelityDataset</span><span class="p">,</span> <span class="n">MultiFidelityDataset</span>
 </code></pre></div>
@@ -562,10 +567,10 @@ Number of out-of-distribution test samples: 99
 <div class="highlight"><pre><span></span><code><span class="n">dataset</span><span class="o">.</span><span class="n">get_train_val_split</span><span class="p">(</span><span class="n">num_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">num_val</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">dataset</span><span class="o">.</span><span class="n">plot_training_data</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </code></pre></div>
-<p><img alt="img" src="../_data/6202d337ce8f40308198c78fe3855f85.png" /></p>
+<p><img alt="img" src="../_data/d9038bd94c9c4ee28bcbfb84b343c561.png" /></p>
 <div class="highlight"><pre><span></span><code><span class="n">dataset</span><span class="o">.</span><span class="n">plot_testing_data</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">test_data</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p><img alt="img" src="../_data/e2d8ff31015b4fad96f777ee9f5806e4.png" /></p>
+<p><img alt="img" src="../_data/79f7d59626d34d09888576d629c97cae.png" /></p>
 <div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">MultiFidelityDataset</span><span class="p">(</span><span class="n">lf_train_data_path</span> <span class="o">=</span> <span class="s2">&quot;lf_sca_rve_0d125_2_1.pickle&quot;</span><span class="p">,</span>
                          <span class="n">hf_train_data_path</span><span class="o">=</span> <span class="s2">&quot;hf_dns_rve_0d1.pickle&quot;</span><span class="p">,</span>
                          <span class="n">id_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -588,11 +593,11 @@ Number of out-of-distribution test samples: 99
 <div class="highlight"><pre><span></span><code><span class="c1"># plot</span>
 <span class="n">dataset</span><span class="o">.</span><span class="n">plot_training_data</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fidelity</span><span class="o">=</span><span class="s1">&#39;lf&#39;</span><span class="p">)</span>
 </code></pre></div>
-<p><img alt="img" src="../_data/c043bc1d9e8446798cba82e789931429.png" /></p>
+<p><img alt="img" src="../_data/1a586ca49e8440cd944768693b4a68da.png" /></p>
 <div class="highlight"><pre><span></span><code><span class="c1"># plot testing data</span>
 <span class="n">dataset</span><span class="o">.</span><span class="n">plot_testing_data</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">test_data</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p><img alt="img" src="../_data/aacae7437e824d018811a75ed834103a.png" /></p>
+<p><img alt="img" src="../_data/467803d01696406e87a72b0034f859ea.png" /></p>
 
 
 

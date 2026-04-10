@@ -29,7 +29,7 @@
     
     
       
-        <title>Sf rnn training - MF-VeBRNN</title>
+        <title>Single-fidelity RNN training - MF-VeBRNN</title>
       
     
     
@@ -83,6 +83,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#single-fidelity-rnn-training" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -115,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Sf rnn training
+              Single-fidelity RNN training
             
           </span>
         </div>
@@ -323,6 +328,8 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -331,7 +338,7 @@
   <span class="md-ellipsis">
     
   
-    Sf rnn training
+    Single-fidelity RNN training
   
 
     
@@ -359,7 +366,7 @@
   <span class="md-ellipsis">
     
   
-    Sf vebrnn training
+    Single-fidelity VeBRNN training
   
 
     
@@ -386,7 +393,7 @@
   <span class="md-ellipsis">
     
   
-    Mf nest training
+    Multi-fidelity Nested RNN training
   
 
     
@@ -413,7 +420,7 @@
   <span class="md-ellipsis">
     
   
-    Mf residual training
+    Multi-fidelity Residual RNN training
   
 
     
@@ -440,7 +447,7 @@
   <span class="md-ellipsis">
     
   
-    Mf nest vebrnn training
+    Multi-fidelity Nested VeBRNN training
   
 
     
@@ -467,7 +474,7 @@
   <span class="md-ellipsis">
     
   
-    Mf residual vebrnn training
+    Multi-fidelity Residual VeBRNN training
   
 
     
@@ -551,8 +558,8 @@
 
 
 
-  <h1>Sf rnn training</h1>
-
+<h1 id="single-fidelity-rnn-training">Single-fidelity RNN training<a class="headerlink" href="#single-fidelity-rnn-training" title="Permanent link">¤</a></h1>
+<p>This notebook guidance on how to train <code>RNN</code> of the <code>MF-VeBRNN</code> repo.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># import packages</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">MFVeBRNN.dataset.load_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingleFidelityDataset</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">MFVeBRNN.method.rnn_trainer</span><span class="w"> </span><span class="kn">import</span> <span class="n">RNNTrainer</span>
@@ -654,7 +661,7 @@ Epoch/Total: 400/500, Train Loss: 1.943e-02, Val Loss: 2.490e-02
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
-<p><img alt="img" src="../_data/483b178246314d74bd3de44cebb37e10.png" /></p>
+<p><img alt="img" src="../_data/2fe060cf8f82401aab8e600394cf77c9.png" /></p>
 
 
 
