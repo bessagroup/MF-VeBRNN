@@ -12,13 +12,9 @@
         <meta name="author" content="Jiaxiang Yi">
       
       
-        <link rel="canonical" href="https://bessagroup.github.io/MF-VeBRNN/installation/">
+        <link rel="canonical" href="https://bessagroup.github.io/MF-VeBRNN/load_dataset/">
       
       
-        <link rel="prev" href="..">
-      
-      
-        <link rel="next" href="../sf_rnn_training/">
       
       
         
@@ -29,7 +25,7 @@
     
     
       
-        <title>Installation - MF-VeBRNN</title>
+        <title>Load dataset - MF-VeBRNN</title>
       
     
     
@@ -115,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Installation
+              Load dataset
             
           </span>
         </div>
@@ -287,17 +283,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
         
   
   
@@ -313,7 +302,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -551,18 +539,60 @@
 
 
 
-  <h1>Installation</h1>
+  <h1>Load dataset</h1>
 
-<p><strong>Installation</strong></p>
-<p>(1). git clone the repo to your local machine</p>
-<div class="highlight"><pre><span></span><code>https://github.com/bessagroup/MF-VeBRNN.git
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MFVeBRNN.dataset.load_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingleFidelityDataset</span><span class="p">,</span> <span class="n">MultiFidelityDataset</span>
 </code></pre></div>
-<p>(2). go to the local folder where you cloned the repo, and pip install it with editable mode</p>
-<div class="highlight"><pre><span></span><code>pip install --editable .
+<div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">SingleFidelityDataset</span><span class="p">(</span><span class="n">train_data_path</span> <span class="o">=</span> <span class="s2">&quot;lf_dns_sve_0d1.pickle&quot;</span><span class="p">,</span>
+                         <span class="n">id_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">id_test_data_path</span><span class="o">=</span><span class="s2">&quot;hf_dns_rve_0d1_gt.pickle&quot;</span><span class="p">,</span>
+                         <span class="n">id_ground_truth_data_path</span><span class="o">=</span><span class="s2">&quot;lf_dns_sve_0d1_gt.pickle&quot;</span><span class="p">,</span>
+                         <span class="n">ood_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">ood_test_data_path</span><span class="o">=</span><span class="s2">&quot;hf_dns_rve_0d125_gt.pickle&quot;</span><span class="p">,</span>
+                         <span class="n">ood_ground_truth_data_path</span><span class="o">=</span><span class="s2">&quot;lf_dns_sve_0d125_gt.pickle&quot;</span><span class="p">,)</span>
 </code></pre></div>
-<p>(3). install requirements
-<div class="highlight"><pre><span></span><code>pip install -r requirements.txt
-</code></pre></div></p>
+<div class="highlight"><pre><span></span><code>=============================================================
+The dataset is loaded successfully.
+Number of training samples: 2981
+Number of in-distribution test samples: 99
+Number of out-of-distribution test samples: 99
+=============================================================
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">dataset</span><span class="o">.</span><span class="n">get_train_val_split</span><span class="p">(</span><span class="n">num_train</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">num_val</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">plot_training_data</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="img" src="../_data/6202d337ce8f40308198c78fe3855f85.png" /></p>
+<div class="highlight"><pre><span></span><code><span class="n">dataset</span><span class="o">.</span><span class="n">plot_testing_data</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">test_data</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="img" src="../_data/e2d8ff31015b4fad96f777ee9f5806e4.png" /></p>
+<div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">MultiFidelityDataset</span><span class="p">(</span><span class="n">lf_train_data_path</span> <span class="o">=</span> <span class="s2">&quot;lf_sca_rve_0d125_2_1.pickle&quot;</span><span class="p">,</span>
+                         <span class="n">hf_train_data_path</span><span class="o">=</span> <span class="s2">&quot;hf_dns_rve_0d1.pickle&quot;</span><span class="p">,</span>
+                         <span class="n">id_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">id_hf_test_data_path</span><span class="o">=</span><span class="s2">&quot;hf_dns_rve_0d1_gt.pickle&quot;</span><span class="p">,</span>
+                         <span class="n">id_lf_ground_truth_data_path</span><span class="o">=</span><span class="s2">&quot;lf_sca_sve_0d125_2_1_gt.pickle&quot;</span><span class="p">,</span>
+                         <span class="n">ood_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">ood_hf_test_data_path</span><span class="o">=</span><span class="s2">&quot;hf_dns_rve_0d125_gt.pickle&quot;</span><span class="p">,</span>
+                         <span class="n">ood_lf_ground_truth_data_path</span><span class="o">=</span><span class="s2">&quot;lf_sca_sve_0d125_2_1_gt.pickle&quot;</span><span class="p">,)</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">get_hf_train_val_split</span><span class="p">(</span><span class="n">num_hf_train</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_hf_val</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">get_lf_train_val_split</span><span class="p">(</span><span class="n">num_lf_train</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_lf_val</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>=============================================================
+The dataset is loaded successfully.
+Number of low-fidelity training samples: 4929
+Number of high-fidelity training samples: 1291
+Number of in-distribution test samples: 99
+Number of out-of-distribution test samples: 99
+=============================================================
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># plot</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">plot_training_data</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fidelity</span><span class="o">=</span><span class="s1">&#39;lf&#39;</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="img" src="../_data/c043bc1d9e8446798cba82e789931429.png" /></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># plot testing data</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">plot_testing_data</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">test_data</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="img" src="../_data/aacae7437e824d018811a75ed834103a.png" /></p>
 
 
 

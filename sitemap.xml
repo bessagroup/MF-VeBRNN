@@ -20,4 +20,32 @@
          <loc>https://bessagroup.github.io/MF-VeBRNN/readme/</loc>
          <lastmod>2026-04-10</lastmod>
     </url>
+    <url>
+         <loc>https://bessagroup.github.io/MF-VeBRNN/load_dataset/</loc>
+         <lastmod>2026-04-10</lastmod>
+    </url>
+    <url>
+         <loc>https://bessagroup.github.io/MF-VeBRNN/mf_nest_training/</loc>
+         <lastmod>2026-04-10</lastmod>
+    </url>
+    <url>
+         <loc>https://bessagroup.github.io/MF-VeBRNN/mf_nest_vebrnn_training/</loc>
+         <lastmod>2026-04-10</lastmod>
+    </url>
+    <url>
+         <loc>https://bessagroup.github.io/MF-VeBRNN/mf_residual_training/</loc>
+         <lastmod>2026-04-10</lastmod>
+    </url>
+    <url>
+         <loc>https://bessagroup.github.io/MF-VeBRNN/mf_residual_vebrnn_training/</loc>
+         <lastmod>2026-04-10</lastmod>
+    </url>
+    <url>
+         <loc>https://bessagroup.github.io/MF-VeBRNN/sf_rnn_training/</loc>
+         <lastmod>2026-04-10</lastmod>
+    </url>
+    <url>
+         <loc>https://bessagroup.github.io/MF-VeBRNN/sf_vebrnn_training/</loc>
+         <lastmod>2026-04-10</lastmod>
+    </url>
 </urlset>

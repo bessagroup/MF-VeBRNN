@@ -12,13 +12,13 @@
         <meta name="author" content="Jiaxiang Yi">
       
       
-        <link rel="canonical" href="https://bessagroup.github.io/MF-VeBRNN/installation/">
+        <link rel="canonical" href="https://bessagroup.github.io/MF-VeBRNN/sf_rnn_training/">
       
       
-        <link rel="prev" href="..">
+        <link rel="prev" href="../installation/">
       
       
-        <link rel="next" href="../sf_rnn_training/">
+        <link rel="next" href="../sf_vebrnn_training/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Installation - MF-VeBRNN</title>
+        <title>Sf rnn training - MF-VeBRNN</title>
       
     
     
@@ -115,7 +115,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Installation
+              Sf rnn training
             
           </span>
         </div>
@@ -287,6 +287,33 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -304,34 +331,6 @@
   <span class="md-ellipsis">
     
   
-    Installation
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../sf_rnn_training/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
     Sf rnn training
   
 
@@ -341,6 +340,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -551,18 +551,110 @@
 
 
 
-  <h1>Installation</h1>
+  <h1>Sf rnn training</h1>
 
-<p><strong>Installation</strong></p>
-<p>(1). git clone the repo to your local machine</p>
-<div class="highlight"><pre><span></span><code>https://github.com/bessagroup/MF-VeBRNN.git
+<div class="highlight"><pre><span></span><code><span class="c1"># import packages</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MFVeBRNN.dataset.load_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingleFidelityDataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MFVeBRNN.method.rnn_trainer</span><span class="w"> </span><span class="kn">import</span> <span class="n">RNNTrainer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>(2). go to the local folder where you cloned the repo, and pip install it with editable mode</p>
-<div class="highlight"><pre><span></span><code>pip install --editable .
+<div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">SingleFidelityDataset</span><span class="p">(</span><span class="n">train_data_path</span> <span class="o">=</span> <span class="s2">&quot;lf_dns_sve_0d1.pickle&quot;</span><span class="p">,</span>
+                            <span class="n">id_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">id_test_data_path</span><span class="o">=</span><span class="s2">&quot;hf_dns_rve_0d1_gt.pickle&quot;</span><span class="p">,</span>
+                            <span class="n">id_ground_truth_data_path</span><span class="o">=</span><span class="s2">&quot;lf_dns_sve_0d1_gt.pickle&quot;</span><span class="p">,</span>
+                            <span class="n">ood_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">ood_test_data_path</span><span class="o">=</span><span class="s2">&quot;hf_dns_rve_0d125_gt.pickle&quot;</span><span class="p">,</span>
+                            <span class="n">ood_ground_truth_data_path</span><span class="o">=</span><span class="s1">&#39;lf_dns_sve_0d125_gt.pickle&#39;</span><span class="p">,)</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">get_train_val_split</span><span class="p">(</span><span class="n">num_train</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">num_val</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </code></pre></div>
-<p>(3). install requirements
-<div class="highlight"><pre><span></span><code>pip install -r requirements.txt
-</code></pre></div></p>
+<div class="highlight"><pre><span></span><code>=============================================================
+The dataset is loaded successfully.
+Number of training samples: 2981
+Number of in-distribution test samples: 99
+Number of out-of-distribution test samples: 99
+=============================================================
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SimpleGRU</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">output_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">bias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gru</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span>
+                          <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
+                          <span class="n">num_layers</span><span class="o">=</span><span class="n">num_layers</span><span class="p">,</span>
+                          <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
+                          <span class="n">batch_first</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h2y</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">hx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gru</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">hx</span><span class="p">)</span>      <span class="c1"># (B, T, hidden_size)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h2y</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>             <span class="c1"># (B, T, output_size)</span>
+        <span class="k">return</span> <span class="n">y</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># define the RNN model</span>
+<span class="n">rnn_network</span> <span class="o">=</span> <span class="n">SimpleGRU</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                      <span class="n">hidden_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+                      <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                      <span class="n">output_size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1"># define the RNN trainer</span>
+<span class="n">DeepRNN</span> <span class="o">=</span> <span class="n">RNNTrainer</span><span class="p">(</span>
+        <span class="n">net</span><span class="o">=</span><span class="n">rnn_network</span><span class="p">,</span>
+        <span class="n">device</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda:0&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+<span class="c1"># define the optimizer</span>
+<span class="n">DeepRNN</span><span class="o">.</span><span class="n">configure_optimizer_info</span><span class="p">(</span><span class="n">optimizer_name</span><span class="o">=</span><span class="s2">&quot;Adam&quot;</span><span class="p">,</span>
+                                <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
+                                <span class="n">weight_decay</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="c1"># define the loss function</span>
+<span class="n">DeepRNN</span><span class="o">.</span><span class="n">configure_loss_function</span><span class="p">(</span><span class="n">loss_name</span><span class="o">=</span><span class="s2">&quot;MSE&quot;</span><span class="p">)</span>
+
+<span class="c1"># train the model</span>
+<span class="n">min_loss</span><span class="p">,</span> <span class="n">min_epoch</span> <span class="o">=</span> <span class="n">DeepRNN</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">x_train</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">x_train</span><span class="p">,</span>
+    <span class="n">y_train</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">y_train</span><span class="p">,</span>
+    <span class="n">x_val</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">x_val</span><span class="p">,</span>
+    <span class="n">y_val</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">y_val</span><span class="p">,</span>
+    <span class="n">num_epochs</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+
+    <span class="n">print_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># save the model</span>
+<span class="c1"># torch.save(DeepRNN, &quot;single_fidelity_rnn_model.pth&quot;)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Epoch/Total: 0/500, Train Loss: 9.183e-01, Val Loss: 9.715e-01
+Epoch/Total: 100/500, Train Loss: 2.264e-01, Val Loss: 2.307e-01
+Epoch/Total: 200/500, Train Loss: 3.628e-02, Val Loss: 4.075e-02
+Epoch/Total: 300/500, Train Loss: 2.566e-02, Val Loss: 3.057e-02
+Epoch/Total: 400/500, Train Loss: 1.943e-02, Val Loss: 2.490e-02
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># get the prediction of the test data</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">DeepRNN</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">x_id_gt_scaled</span><span class="p">)</span>
+<span class="c1"># scale back to the original space</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">scale_back_outputs</span><span class="p">(</span><span class="n">y_pred</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">())</span>
+<span class="c1"># plot the dataset</span>
+<span class="n">index</span> <span class="o">=</span><span class="mi">1</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">ID_X</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;hx test&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">ID_Y</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;hy train&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_pred</span><span class="o">.</span><span class="n">cpu</span><span class="p">()[</span><span class="n">index</span><span class="p">,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;y pred&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="img" src="../_data/483b178246314d74bd3de44cebb37e10.png" /></p>
 
 
 
