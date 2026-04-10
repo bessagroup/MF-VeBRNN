@@ -95,6 +95,12 @@ plugins:
 nav:
     - 'index.md'
     - 'installation.md'
-    # - 'usage.ipynb'
+    - 'sf_rnn_training.ipynb'
+    - 'sf_vebrnn_training.ipynb'
+    - 'mf_nest_training.ipynb'
+    - 'mf_residual_training.ipynb'
+    - 'mf_nest_vebrnn_training.ipynb'
+    - 'mf_residual_vebrnn_training.ipynb'
+    - 'load_dataset.ipynb'
     - 'api.md'
     - 'license.md'

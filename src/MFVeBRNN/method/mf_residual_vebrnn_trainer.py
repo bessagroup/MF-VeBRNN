@@ -140,11 +140,9 @@ class MFResidualVeBRNNTrainer:
         """
         x_train = x_train.to(self.device)
         y_train = y_train.to(self.device)
-        print(x_train.shape, y_train.shape)
         # re-arrange the input data
         y_train = self._calculate_residual(x_train, y_train)
         x_train = self._re_arrange_input(x_train)
-        print(x_train.shape, y_train.shape)
         # train the residual model with the VeBNN trainer
         self.hf_vebrnn_trainer.cooperative_train(
             x_train=x_train,
@@ -192,6 +190,28 @@ class MFResidualVeBRNNTrainer:
         y_pred_mean += y_lf
 
         return y_pred_mean.detach(), y_pred_var.detach()
+
+    def hf_aleatoric_variance_predict(self, x: Tensor) -> Tensor:
+        """Predict the aleatoric variance of the output at the scaled data.
+
+        Parameters
+        ----------
+        x : Tensor
+            Test data points.
+
+        Returns
+        -------
+        Tensor
+            Predicted aleatoric variance at the scaled space.
+        """
+        x = x.to(self.device)
+        # get the re-arranged input data
+        x = self._re_arrange_input(x)
+
+        # get the aleatoric variance prediction from the residual model
+        var_aleatoric = self.hf_vebrnn_trainer.aleatoric_variance_predict(x)
+
+        return var_aleatoric.detach()
 
     def lf_predict(self, x: Tensor, return_var: bool = False) -> Tensor:
         """predict the output of the network

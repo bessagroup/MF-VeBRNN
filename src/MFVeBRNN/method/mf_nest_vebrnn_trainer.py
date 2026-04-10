@@ -224,6 +224,28 @@ class MFNestVeBRNNTrainer:
 
         return y_pred_mean.detach(), y_pred_var.detach()
 
+    def hf_aleatoric_variance_predict(self, x: Tensor) -> Tensor:
+        """Predict the aleatoric variance of the output at the scaled data.
+
+        Parameters
+        ----------
+        x : Tensor
+            Test data points.
+
+        Returns
+        -------
+        Tensor
+            Predicted aleatoric variance at the scaled space.
+        """
+        x = x.to(self.device)
+        # get the re-arranged input data
+        x = self._re_arrange_input(x)
+
+        # get the aleatoric variance prediction from the residual model
+        var_aleatoric = self.hf_vebrnn_trainer.aleatoric_variance_predict(x)
+
+        return var_aleatoric.detach()
+
     def lf_predict(self, x: Tensor, return_var: bool = False) -> Tensor:
         """predict the output of the network
 

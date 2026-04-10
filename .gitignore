@@ -208,5 +208,6 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-examples_/
+examples/
 site/
+**.pth
