@@ -6,7 +6,7 @@
   <a href=""><img alt="logo" src="logo/logo.png" width="40%"></a>
 </p>
 
-# What is VeBNN?
+# What is MF-VeBRNN?
 
 | [**GitHub**](https://github.com/bessagroup/MF-VeBRNN.git)
 | [**Paper**](https://www.sciencedirect.com/science/article/pii/S0045782525007510) |

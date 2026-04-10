@@ -118,10 +118,6 @@ class RNNTrainer:
             print the training information, by default True
         print_iter : int, optional
             print the training information every certain epochs, by default 100
-        save_best_model : bool, optional
-            save the best model during training, by default False
-        name : str, optional
-            name of the best model, by default "best_val_net.pth"
 
         Returns
         -------

@@ -1,17 +1,14 @@
 # API Reference
 
 ## Methods
-::: VeBNN.methods.SGMCMCTrainer
+::: MFVeBRNN.method.RNNTrainer
+::: MFVeBRNN.method.VeBRNNTrainer
+::: MFVeBRNN.method.MFNestRNNTrainer
+::: MFVeBRNN.method.MFResidualRNNTrainer
+::: MFVeBRNN.method.MFNestVeBRNNTrainer
+::: MFVeBRNN.method.MFResidualVeBRNNTrainer
 
 
-## Networks
-::: VeBNN.networks.MeanNet
-::: VeBNN.networks.GammaVarNet
-
-## Sampler 
-::: VeBNN.samplers.SGLD
-::: VeBNN.samplers.pSGLD
-::: VeBNN.samplers.SGHMC
-
-## Problems
-::: VeBNN.problems.PlasticityLaw
+## Datasets
+::: MFVeBRNN.dataset.SingleFidelityDataset
+::: MFVeBRNN.dataset.MultiFidelityDataset

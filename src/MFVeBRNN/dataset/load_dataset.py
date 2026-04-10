@@ -736,10 +736,10 @@ class MultiFidelityDataset:
 
         Parameters
         ----------
-        num_train : int
-            Number of training data
-        num_val : int
-            Number of validation data
+        num_lf_train : int
+            Number of low-fidelity training data
+        num_lf_val : int
+            Number of low-fidelity validation data
         seed: int
             seed of selecting the training paths
         """
@@ -775,9 +775,9 @@ class MultiFidelityDataset:
         """Get the processed data for training, validation, and testing
         Parameters
         ----------
-        num_train : int
+        num_hf_train : int
             Number of training data
-        num_val : int
+        num_hf_val : int
             Number of validation data
         """
         total_hf_samples = len(self.hf_dataset)

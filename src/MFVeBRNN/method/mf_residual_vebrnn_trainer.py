@@ -130,7 +130,7 @@ class MFResidualVeBRNNTrainer:
 
         Parameters
         ----------
-        X : torch.Tensor
+        x : torch.Tensor
             Test data points.
         save_ppd : bool, optional
             Whether to save ppd or not (default is False).

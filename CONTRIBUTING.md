@@ -8,7 +8,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at https://github.com/JiaxiangYi96/test/issues.
+Report bugs at https://github.com/bessagroup/MF-VeBRNN/issues.
 
 If you are reporting a bug, please include:
 
@@ -18,7 +18,7 @@ If you are reporting a bug, please include:
 
 ### Submit Feedback
 
-The best way to send feedback is to file an issue at https://github.com/JiaxiangYi96/test/issues.
+The best way to send feedback is to file an issue at https://github.com/bessagroup/MF-VeBRNN/issues.
 
 ## Code of Conduct
 
